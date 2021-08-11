@@ -1,19 +1,14 @@
-
 <!-- %@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %-->
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="ISO-8859-1">
 
 		<title>Patient Home</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link th:href="@{/css/patient_home.css}" rel="stylesheet">
-		
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<style>
+		@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
 			body{background-color: #f7fffa; font-family: 'Jost', sans-serif;}
 			.topnavi a {
   				float: left;
@@ -33,7 +28,6 @@
   				background-color: darkcyan;
   				color: ghostwhite;
 				}
-				
 			#sampleForm{
 				background-color:darkcyan;
 				color:white;
@@ -41,56 +35,94 @@
 				width:20%;
 				text-align:center;
 				height:45px;
-				border-radius: 8px;
 			}	
-				
+			input[type=text]{
+			border: none;
+			background-color: #ddd;
+			padding: 8px;
+			}
+			option{
+			background-color:white;
+			}
+				 
 		</style>
 	</head>
 	<body>
 	<div style=" height: 40px;"></div>
-	<div style="margin : auto; background-color: black;">
-		<div class="topnavi" style="margin-left: 100px; margin-right: 100px;">
+	<div style="background-color: black;">
+		<div class="topnavi" style="margin-left:50px;">
   			<a class="active" th:href="@{/profile/__${pat.userName}__}">Profile</a>
   			<a href="/about">About</a>
-  			<a href="/" style="color: ghostwhite; border-radius :10px; background-color:red; margin-left: 1000px;" >Logout</a>
+  			<a href="/" style="margin-left:1000px;" >Logout</a>
 		</div>
+		
 	</div>
 	<br>
 	<br>
-	<!--div align=center>
-		<div style="width:80%;">
-		<p align="center" style="size: 100px;">
-			<h3><b>Welcome  </b><span th:text="${pat.fName}"></span>  <span th:text="${pat.lName}"></span>  .....<br></h3>
-		</p>
+	<div align=center>
+		<br>
+		<br>
+		<br>
+		<div style="border:3px solid darkcyan; width:80%; border-radius:10px;">
+		<p align="center">
+			<b>Welcome  </b><span th:text="${pat.fName}"></span>  <span th:text="${pat.lName}"></span>  ...<br>
+			<br>
+			
+			<b>User Name:</b><span th:text="${pat.userName}"></span> <br><br>
+			
+			<b>Email_Id:</b><span th:text="${pat.emailId}"></span> <br><br>
+			
+			<b>Contact Number:</b><span th:text=" ${pat.contactNo}"></span><br>
+			
+			</p>
 		</div>
 		<br>
-	</div-->
-	
+		
+	  </div>
 
 	  <div align=center>
-		<form id="searchform" style="background-color: silver; margin: 10px; padding: 25px;">
+		<form id="searchform">
 			<h2><b>Search Doctors?</b></h2>
+
+			<label for="type"><b>Enter the type of Doctor</b></label><br>
+			<input type="text" id="type" name="type"><br><br>
+			<!-- A drop down list of Cardiologist, Dentist, Physician,Gynecologist, Pediatrician,Psychiatrist,Veterinarian etc   -->
 			
-			<div>				
-				<label for="type">Enter the type of Doctor:</label><br>
-				<input type="text" id="type" name="type"><br><br>
-				
-				<label for="city">Enter Your City</label><br>
-				<input type="text" id="city" name="city"><br><br>
-				
-				<label for="state">Enter Your State</label><br>
-				<input type="text" id="state" name="state"><br><br>
-			</div>
+			<!-- -----------------DROPDOWN(for further use)--------------------------------------------------------- -->
+			
+			<!--  <select name="type" id="type" style="width:185px;border:none;background-color: #ddd; padding:8px;">
+			<option value="Neurologist">Neurologist</option>
+			<option value="Cardiologist">Cardiologist</option>
+			<option value="Dentist">Dentist</option>
+			<option value="Physician">Physician</option>
+			<option value="Gynecologist">Gynecologist</option>
+			<option value="Pediatrician">Pediatrician</option>
+			<option value="Psychiatrist">Psychiatrist</option>
+			
+			</select>
+			<br>
+			<br>
+			-->
+			<!-- -------------------------------------------------------------------------- -->
+			
+			
+			<label for="state"><b>Enter Your State</b></label><br>
+			<input type="text" id="state" name="state"><br><br>
+			
+
+			<label for="city"><b>Enter Your City</b></label><br>
+
+			<input type="text" id="city" name="city"><br><br>
 			
 			<button id="sampleForm" type="submit">SEARCH DOCTOR</button>
+		<!-- This will be handled by "user_search_results" in Doctor Controller-->
 		</form>
-
+		<br>
+		<br>
 	 </div>
 
 		<div id="searchResultList">
-			<ul class ="listgroup">
 			
-			</ul>
 		</div>
 		
 		<script type="text/javascript">
@@ -108,14 +140,14 @@
 							var result = "";
 							$("#searchResultList").html('');
 		                    $.each(data, function (id, doctor) {
-		                        result += '<form id=\"doctor\" action=\"/doctor/'+ doctor.userName + '\" method=\"get\">'+
-		                        '<b>Doctor     : </b>' + doctor.fName + ' ' + doctor.lName + '<br/>' +
+		                        result += '<div style="width:1010px;font-size:16px; margin:auto;background-color: background-color: #ddd;"><form id=\"doctor\" action=\"/doctor/'+ doctor.userName + '\" method=\"get\">'+
+		                        '<div style="float:left; width:20%;height:132px; background-color: #ddd;"><img src="images/doctor.png" style="width:120px; height:150px;padding-left:25px;"/></div><div style="float:left; width:40%; height:122px; padding-top:10px;background-color: #ddd;"><b>Doctor     : </b>' + doctor.fName + ' ' + doctor.lName + '<br/>' +
 			                    	'<b>Speciality : </b>' + doctor.speciality + '<br/>' +
 			                    	'<b>Contact    : </b>' + doctor.contactNo + '<br/>' +
-		                        	'<b>state      : </b>' + doctor.state + '<br/>' +
-		                            '<b> city      : </b>' + doctor.city + '<br/>'+
-		                            '<button type="submit">CHECKOUT DOCTOR</button> <br/>'+
-		                            '</form><br><br><br/>';
+		                        	'<b>State      : </b>' + doctor.state + '<br/>' +
+		                            '<b>City      : </b>' + doctor.city + '<br/> </div>'+
+		                            '<div style="float:right; width:40%; height:132px; text-align:center;background-color: #ddd;"><button type="submit" style="background-color:darkcyan;font-size:16px;color:white; border:none; height:35px; padding:10px;margin-top:25px;">CHECKOUT DOCTOR</button> <br/>'+
+		                            '</form><br><br><br/></div><br><br></div><br><br><br><br><br><hr style="width:1010px; "><br>';
 
 		                    });
 
