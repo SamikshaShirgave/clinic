@@ -52,6 +52,7 @@ public class HomeController {
 	{
 		return "about";
 	}
+
 	
 	@RequestMapping("/home")
 	public String login_user(@ModelAttribute User u,Model m)
